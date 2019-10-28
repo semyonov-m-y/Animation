@@ -7,6 +7,9 @@ import android.widget.ImageView;
 
 public class ValueAnimationActivity extends AppCompatActivity {
 
+    private ValueAnimator alphaAnimator;
+    private ValueAnimator translationYAnimator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -14,21 +17,33 @@ public class ValueAnimationActivity extends AppCompatActivity {
 
         final ImageView imageView = findViewById(R.id.value);
 
-        ValueAnimator alphaAnimator = ValueAnimator.ofFloat(0f, 1f);
+        alphaAnimator = ValueAnimator.ofFloat(0f, 1f);
         configureAnimation(alphaAnimator);
         alphaAnimator.addUpdateListener(animation -> imageView.setAlpha((Float) animation.getAnimatedValue()));
-        alphaAnimator.start();
 
         final float length = (-1f) * getResources().getDimension(R.dimen.y_length);
-        ValueAnimator translationYAnimator = ValueAnimator.ofFloat(0f, length);
+        translationYAnimator = ValueAnimator.ofFloat(0f, length);
         configureAnimation(translationYAnimator);
         translationYAnimator.addUpdateListener(animation -> imageView.setTranslationY((Float) animation.getAnimatedValue()));
-        translationYAnimator.start();
     }
 
     private void configureAnimation(ValueAnimator animator) {
         animator.setRepeatMode(ValueAnimator.RESTART);
         animator.setRepeatCount(20);
         animator.setDuration(3000);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        alphaAnimator.start();
+        translationYAnimator.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        alphaAnimator.end();
+        translationYAnimator.end();
     }
 }

@@ -9,6 +9,9 @@ import android.widget.ImageView;
 
 public class ObjectAnimationActivity extends AppCompatActivity {
 
+    private ObjectAnimator scaleXAnimator;
+    private ObjectAnimator scaleYAnimator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,10 +19,8 @@ public class ObjectAnimationActivity extends AppCompatActivity {
 
         ImageView imageView = findViewById(R.id.object);
 
-        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(imageView, "scaleX", 0.3f, 0.5f, 0.3f, 1f, 0.3f);
-        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(imageView, "scaleY", 0.3f, 0.5f, 0.3f, 1f, 0.3f);
-        configure(scaleXAnimator).start();
-        configure(scaleYAnimator).start();
+        scaleXAnimator = ObjectAnimator.ofFloat(imageView, "scaleX", 0.3f, 0.5f, 0.3f, 1f, 0.3f);
+        scaleYAnimator = ObjectAnimator.ofFloat(imageView, "scaleY", 0.3f, 0.5f, 0.3f, 1f, 0.3f);
     }
 
     private Animator configure(ObjectAnimator animator) {
@@ -27,5 +28,19 @@ public class ObjectAnimationActivity extends AppCompatActivity {
         animator.setRepeatMode(ValueAnimator.RESTART);
         animator.setRepeatCount(ValueAnimator.INFINITE);
         return animator;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        configure(scaleXAnimator).start();
+        configure(scaleYAnimator).start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        configure(scaleXAnimator).end();
+        configure(scaleYAnimator).end();
     }
 }
